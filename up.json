@@ -1,0 +1,21 @@
+{
+  "name": "screenshot",
+  "profile": "mine",
+  "lambda": {
+    "memory": 3008
+  },
+  "stages": {
+    "staging": {
+      "domain": "s2.dabase.com"
+    },
+    "production": {
+      "domain": "s.dabase.com"
+    }
+  },
+  "regions": [
+    "ap-southeast-1"
+  ],
+  "error_pages": {
+    "disable": true
+  }
+}
