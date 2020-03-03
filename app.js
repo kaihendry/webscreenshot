@@ -9,7 +9,10 @@ const { PORT = 3000 } = process.env
 
 app.get('/', async (req, res) => {
   let url = req.query.url
-  if (!url) { return }
+  if (!url) {
+    res.status(400).end()
+    return
+  }
 
   // log.info('screenshot', { url })
 
