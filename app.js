@@ -1,8 +1,8 @@
+const AWS = require('aws-sdk')
 const express = require('express')
 const playwright = require('playwright')
-const AWS = require('aws-sdk')
-const app = express()
 
+const app = express()
 const { PORT = 3000 } = process.env
 
 app.get('/', async (req, res) => {
@@ -19,26 +19,14 @@ app.get('/', async (req, res) => {
   const screenshotBuffer = await page.screenshot()
   await browser.close()
 
-  var credentials = new AWS.SharedIniFileCredentials({profile: 'mine'})
+  const credentials = new AWS.SharedIniFileCredentials({profile: 'mine'})
   AWS.config.credentials = credentials
 
-  AWS.config.getCredentials(function (err) {
-    if (err) {
-      console.log(err.stack)
-      res.status(500).end()
-    } else {
-      console.log('Access key:', AWS.config.credentials.accessKeyId)
-      console.log('Secret access key:', AWS.config.credentials.secretAccessKey)
-      console.log('Region: ', AWS.config.region)
-    }
-  })
+  const bucketName = process.env.BUCKET || 'dabase.com'
+  const yyyymmdd = new Date().toISOString().split('T')[0]
+  const keyName = `${encodeURIComponent(url)}.png`
 
-  var bucketName = 'dabase.com'
-  var d = new Date()
-  var yyyymmdd = d.toISOString().split('T')[0]
-  var keyName = `${encodeURIComponent(url)}.png`
-
-  var objectParams = {
+  const objectParams = {
     Bucket: bucketName,
     Key: `${yyyymmdd}/${keyName}`,
     Body: screenshotBuffer,
@@ -48,17 +36,17 @@ app.get('/', async (req, res) => {
 
   console.log(`Uploading to ${objectParams.Key}`)
 
-  var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise()
-  uploadPromise.then(
-    function (data) {
-      console.log('Successfully uploaded data to ' + objectParams.Key)
-      res.redirect(`https://${bucketName}/${encodeURI(objectParams.Key)}`)
-    }).catch(
-    function (err) {
-      console.error(err, err.stack)
-      // How to res.pond?
-      res.status(500).end()
-    })
+  new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise()
+    .then(
+      function (data) {
+        console.log('Successfully uploaded data to ' + objectParams.Key)
+        res.redirect(`https://${bucketName}/${encodeURI(objectParams.Key)}`)
+      }).catch(
+      function (err) {
+        console.error(err, err.stack)
+        // How to res.pond?
+        res.status(500).end()
+      })
 })
 
 console.log('listening on %s', PORT)
