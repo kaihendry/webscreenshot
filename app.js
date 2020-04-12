@@ -1,11 +1,19 @@
 const AWS = require('aws-sdk')
 const express = require('express')
-const playwright = require('playwright')
+const playwright = require('playwright-firefox')
 
 const app = express()
 const { PORT = 3000 } = process.env
 
 app.get('/', async (req, res) => {
+  res.send(`<h1>Web screenshot</h1>
+  <form action=/screenshot>
+  <input type=url name=url>
+  <input type=submit>
+  </form>`)
+})
+
+app.get('/screenshot', async (req, res) => {
   let url = req.query.url
   if (!url) {
     res.status(400).end()
