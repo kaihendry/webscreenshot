@@ -16,7 +16,7 @@ app.get('/', async (req, res) => {
 app.get('/screenshot', async (req, res, next) => {
   let url = req.query.url
   if (!url) {
-    res.status(400).end()
+    res.status(400).send('Bad Request: no url provided')
     return
   }
 
@@ -45,8 +45,7 @@ app.get('/screenshot', async (req, res, next) => {
 
     console.log(`Uploading to ${objectParams.Key}`)
 
-    const s3 = new AWS.S3()
-    await s3.putObject(objectParams).promise()
+    await new AWS.S3().putObject(objectParams).promise()
     res.redirect(`https://${bucketName}/${encodeURI(objectParams.Key)}`)
   } catch (error) {
     return next(error)
