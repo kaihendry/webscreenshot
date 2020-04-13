@@ -34,7 +34,6 @@ RUN apt-get install -y libnss3 \
 
 RUN apt-get install -y libdbus-glib-1-2 libxt6
 
-
 WORKDIR /usr/src/app
 
 COPY package*.json ./
@@ -47,4 +46,4 @@ COPY . .
 ARG PORT=8080
 ENV PORT=$PORT
 
-CMD [ "node", "app.js" ]
+CMD [ "npm", "start" ]

@@ -5,6 +5,8 @@ const playwright = require('playwright-firefox')
 const app = express()
 const { PORT = 3000 } = process.env
 
+// console.log(process.env)
+
 app.get('/', async (req, res) => {
   res.send(`<h1>Web screenshot</h1>
   <form action=/screenshot>
@@ -27,9 +29,6 @@ app.get('/screenshot', async (req, res, next) => {
     await page.goto(url)
     const screenshotBuffer = await page.screenshot()
     await browser.close()
-
-    const credentials = new AWS.SharedIniFileCredentials({profile: 'mine'})
-    AWS.config.credentials = credentials
 
     const bucketName = process.env.BUCKET || 'dabase.com'
     const yyyymmdd = new Date().toISOString().split('T')[0]
