@@ -24,7 +24,7 @@ app.get('/screenshot', async (req, res, next) => {
 
   try {
     const browser = await playwright['firefox'].launch()
-    const context = await browser.newContext()
+    const context = await browser.newContext({ viewport: null })
     const page = await context.newPage()
     await page.goto(url)
     const screenshotBuffer = await page.screenshot()
