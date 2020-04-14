@@ -47,7 +47,7 @@ app.get('/screenshot', async (req, res, next) => {
     await new AWS.S3().putObject(objectParams).promise()
     res.redirect(`https://${bucketName}/${encodeURI(objectParams.Key)}`)
   } catch (error) {
-    return next(error)
+    next(error)
   }
 })
 
