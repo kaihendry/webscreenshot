@@ -5,7 +5,7 @@
   "dependencies": {
     "aws-sdk": "^2.656.0",
     "express": "^4.15.3",
-    "playwright-firefox": "^0.13.0"
+    "playwright-firefox": "^1.5.1"
   },
   "author": "Kai Hendry",
   "license": "MIT",
